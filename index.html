@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+<meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+<meta content="Asciidoctor 1.5.1" name="generator">
+<meta content="Presenter Hiroaki Nakamura" name="author">
+<title>Vagrant Shell Provisioner + Ansible + LXCのサンプル紹介</title>
+<link href="deck.js/core/deck.core.css" rel="stylesheet">
+<link href="deck.js/extensions/scale/deck.scale.css" media="screen" rel="stylesheet">
+<link href="deck.js/extensions/navigation/deck.navigation.css" media="screen" rel="stylesheet">
+<link href="deck.js/themes/style/web-2.0.css" media="screen" rel="stylesheet">
+<link href="deck.js/themes/transition/fade.css" media="screen" rel="stylesheet">
+<link href="deck.js/core/print.css" media="print" rel="stylesheet">
+<script src="deck.js/modernizr.custom.js"></script>
+</head>
+<body class="article">
+<div class="deck-container">
+<section class="slide" id="title-slide">
+<h1>Vagrant Shell Provisioner + Ansible + LXCのサンプル紹介</h1>
+<span id="author">Presenter Hiroaki Nakamura</span>
+<br>
+</section>
+<section class="slide" id="_誰">
+<h2>誰？</h2>
+<div class="ulist">
+<ul>
+<li><p>
+中村 弘輝 (なかむら ひろあき)<div class="ulist">
+<ul>
+<li><a class="bare" href="https://twitter.com/hnakamur2">https://twitter.com/hnakamur2</a></li>
+<li><a class="bare" href="https://github.com/hnakamur">https://github.com/hnakamur</a></li>
+<li><a class="bare" href="http://qiita.com/hnakamur">http://qiita.com/hnakamur</a></li>
+</ul>
+</div></p></li>
+<li>株式会社ワンパク <a class="bare" href="http://1pac.jp">http://1pac.jp</a> 大阪オフィス勤務</li>
+<li>サーバサイドエンジニア</li>
+<li><p>
+最近やっていること<div class="ulist">
+<ul>
+<li>Ruby on Rails, Ansible, LXC, Docker, AsciiDoctor</li>
+</ul>
+</div></p></li>
+</ul>
+</div>
+</section>
+<section class="slide" id="_なぜ今回lxcを使ったか">
+<h2>なぜ今回LXCを使ったか？</h2>
+<div class="ulist">
+<ul>
+<li><p>
+RAM 4GBのノートPCでVagrantで複数VMを同時起動するのはつらかったから<div class="ulist">
+<ul>
+<li>案件で2つのRailsアプリが連携するシステムを開発している</li>
+</ul>
+</div></p></li>
+<li>仕事の案件で客先よりLXCを使うという指定があったから</li>
+</ul>
+</div>
+</section>
+<section class="slide" id="_なぜshell_provisionder">
+<h2>なぜShell Provisionder？</h2>
+<div class="ulist">
+<ul>
+<li>WindowsからAnsibleは実行できないが、Vagrant上のLinuxにAnsibleをインストールすればOK</li>
+<li><p>
+Macで使う場合もMac側にAnsibleインストール不要という利点がある<div class="ulist">
+<ul>
+<li>VirtualBoxとVagrantだけインストールしておけばすぐ使える</li>
+</ul>
+</div></p></li>
+<li><p>
+Ansibleインストール後Vagrant上のLinuxでAnsibleを実行<div class="ulist">
+<ul>
+<li>実行中の経過を表示するには <code>PYTHONUNBUFFERED</code> 環境変数を <code>true</code> にしておく</li>
+</ul>
+</div></p></li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre><code>export PYTHONUNBUFFERED=true
+cd /vagrant/provisioning
+ansible-playbook lxc_host.yml</code></pre>
+</div>
+</div>
+</section>
+<section class="slide" id="_今回の構成">
+<h2>今回の構成</h2>
+<div class="imageblock">
+<div class="content">
+<img alt="container structure" src="container-structure.png">
+</div>
+</div>
+</section>
+<section class="slide" id="_作ったansibleプレーブック">
+<h2>作ったAnsibleプレーブック</h2>
+<div class="ulist">
+<ul>
+<li>ソース: <a class="bare" href="https://github.com/hnakamur/lxc-ansible-playbooks">https://github.com/hnakamur/lxc-ansible-playbooks</a></li>
+<li>ライセンス: MIT</li>
+<li>対応ディストリビューション: Ubuntu 14.04とCentOS 6.5</li>
+</ul>
+</div>
+</section>
+<section class="slide" id="_ansible_connection_plugin_for_lxc_containers">
+<h2>Ansible Connection Plugin for lxc containers</h2>
+<div class="ulist">
+<ul>
+<li><a class="bare" href="https://github.com/Mic92/ansible-lxc">https://github.com/Mic92/ansible-lxc</a></li>
+<li>これを使えばコンテナにsshd不要</li>
+<li><p>
+依存コンポーネントとして <a class="bare" href="https://github.com/lxc/python2-lxc">https://github.com/lxc/python2-lxc</a> が必要<div class="ulist">
+<ul>
+<li>lxc公式にバンドルされているliblxcバインディングはPython3</li>
+<li>Ansibleは現状Python3非対応のためpython2-lxcが必要</li>
+</ul>
+</div></p></li>
+<li><p>
+Ansibleでコンテナに接続するにはコンテナ名を指定 (IPアドレス不要)<div class="ulist">
+<ul>
+<li><code>lxc-attach --active</code> を使ったスクリプトでDynamic Inventoryを実現</li>
+</ul>
+</div></p></li>
+</ul>
+</div>
+</section>
+<section class="slide" id="_コンテナのipアドレス取得">
+<h2>コンテナのIPアドレス取得</h2>
+<div class="ulist">
+<ul>
+<li>LXCホスト上のnginxからコンテナのnginxにプロキシするためにコンテナのIPアドレスを知りたい</li>
+<li>Ubuntuのlxcなら <code>lxc-ls --fancy</code> でコンテナのIPアドレスが取得可能</li>
+<li>しかしCentOSの <code>lxc-ls</code> は <code>--fancy</code> が使えない</li>
+<li><code>lxc-attach</code> でコンテナ上で <code>ip</code> コマンドを実行してIPアドレスを取得</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre><code>lxc-attach -n {{ container_name }} -- ip a show eth0 | awk '$1=="inet" {sub(/\/[0-9]+/, ""); print $2}'</code></pre>
+</div>
+</div>
+</section>
+<section class="slide" id="_まとめ">
+<h2>まとめ</h2>
+<div class="ulist">
+<ul>
+<li>Vagrant Shell ProvisionderでAnsibleをインストールすればWindows上でもOK</li>
+<li>Ansible Connection Plugin for lxc containersを使えばコンテナにsshd不要</li>
+</ul>
+</div>
+<div class="paragraph"><p>なお、その後客先指定がlxcからdockerに変わったので実運用はしていません、あしからず。</p></div>
+</section>
+<div aria-role="navigation">
+<a class="deck-prev-link" href="#" title="Previous">&#8592;</a>
+<a class="deck-next-link" href="#" title="Next">&#8594;</a>
+</div>
+</div>
+<script src="deck.js/jquery.min.js"></script>
+<script src="deck.js/core/deck.core.js"></script>
+<script src="deck.js/extensions/scale/deck.scale.js"></script>
+<script src="deck.js/extensions/navigation/deck.navigation.js"></script>
+<script>
+  (function($, deck, undefined) {
+    $.deck.defaults.keys['previous'] = [8, 33, 37, 39];
+    $.deck.defaults.keys['next'] = [13, 32, 34, 39];
+  
+    $.extend(true, $[deck].defaults, {
+        countNested: false
+    });
+  
+    $.deck('.slide');
+  })(jQuery, 'deck');
+</script>
+<style>
+  .slide.canvas-image {
+  -moz-background-size: cover;
+  -webkit-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  display: -moz-box;
+  display: -webkit-box;
+  display: -ms-box;
+  display: box;
+  -moz-box-orient: vertical;
+  -webkit-box-orient: vertical;
+  -ms-box-orient: vertical;
+  box-orient: vertical;
+  -moz-box-align: start;
+  -webkit-box-align: start;
+  -ms-box-align: start;
+  box-align: start;
+  -moz-box-pack: start;
+  -webkit-box-pack: start;
+  -ms-box-pack: start;
+  box-pack: start;}
+  
+  .bottom-left {
+    left: 1%;
+    bottom: 20%; }
+  
+  .top-left {
+    left: 1%;
+    top: 20%; }
+  
+  .bottom-right {
+    right: 1%;
+    bottom: 20%; }
+  
+  .top-right {
+    right: 1%;
+    top: 20%; }
+  
+  .center-up {
+    right: 50%;
+    top: 1%;
+  }
+  
+  .center-down {
+    right: 50%;
+    bottom: 1%;
+  }
+  .canvas-image .canvas-caption p {
+    text-align: center;
+    padding-top: 0;
+    padding: 0;
+    -moz-transform: none;
+    -webkit-transform: none;
+    -o-transform: none;
+    -ms-transform: none;
+    transform: none;
+    display: inline;
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.7);
+    font-weight: bold;
+    font-size: 58px;
+    -webkit-box-shadow: 2px 2px 2px #000;
+    -moz-box-shadow: 2px 2px 2px #000;
+    box-shadow: 2px 2px 2px #000;
+    padding: 1rem;
+    color: white; }
+  kbd.keyseq { color: #555555; }
+  kbd:not(.keyseq) {
+    display: inline-block;
+    color: #222222;
+    font-size: 0.7em;
+    line-height: 1.4;
+    background-color: #F7F7F7;
+    border: 1px solid #ccc;
+    -webkit-border-radius: 3px;
+    border-radius: 3px;
+    -webkit-box-shadow: 0 1px 0 rgba(0, 0, 0, 0.2), 0 0 0 2px white inset;
+    box-shadow: 0 1px 0 rgba(0, 0, 0, 0.2), 0 0 0 2px white inset;
+    margin: -0.15em 0.15em 0 0.15em;
+    padding: 0.2em 0.6em;
+    vertical-align: middle;
+    white-space: nowrap;
+  }
+  kbd kbd:first-child { margin-left: 0; }
+  kbd kbd:last-child { margin-right: 0; }
+</style>
+</body>
+</html>
