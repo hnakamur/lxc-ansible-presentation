@@ -145,12 +145,19 @@ Ansibleでコンテナに接続するにはコンテナ名を指定 (IPアドレ
 <h2>まとめ</h2>
 <div class="ulist">
 <ul>
-<li>vagrant upすればlxcセットアップからコンテナ作成まで行うAnsibleプレーブックを書いた</li>
+<li><p>
+vagrant upすればlxcセットアップからコンテナ作成まで行うAnsibleプレーブックを書いた<div class="ulist">
+<ul>
+<li>といいつつ、途中でエラーになる場合があります</li>
+</ul>
+</div></p></li>
 <li>Vagrant Shell ProvisionderでAnsibleをインストールすればWindows上でもOK</li>
 <li>Ansible Connection Plugin for lxc containersを使えばコンテナにsshd不要</li>
 </ul>
 </div>
 <div class="paragraph"><p>なお、その後客先指定がlxcからdockerに変わったので実運用はしていません、あしからず。</p></div>
+<div class="paragraph"><p>dockerでも似たような構成(2つのunicornコンテナ + 1つのMySQLコンテナ)を作成中です。
+<a class="bare" href="https://github.com/hnakamur/vagrant-docker-rails-development-example">https://github.com/hnakamur/vagrant-docker-rails-development-example</a></p></div>
 </section>
 <div aria-role="navigation">
 <a class="deck-prev-link" href="#" title="Previous">&#8592;</a>

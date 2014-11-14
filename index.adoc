@@ -76,7 +76,11 @@ lxc-attach -n {{ container_name }} -- ip a show eth0 | awk '$1=="inet" {sub(/\/[
 == まとめ
 
 * vagrant upすればlxcセットアップからコンテナ作成まで行うAnsibleプレーブックを書いた
+** といいつつ、途中でエラーになる場合があります
 * Vagrant Shell ProvisionderでAnsibleをインストールすればWindows上でもOK
 * Ansible Connection Plugin for lxc containersを使えばコンテナにsshd不要
 
 なお、その後客先指定がlxcからdockerに変わったので実運用はしていません、あしからず。
+
+dockerでも似たような構成(2つのunicornコンテナ + 1つのMySQLコンテナ)を作成中です。
+https://github.com/hnakamur/vagrant-docker-rails-development-example
