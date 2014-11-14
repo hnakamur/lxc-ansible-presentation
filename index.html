@@ -58,8 +58,8 @@ RAM 4GBのノートPCでVagrantで複数VMを同時起動するのはつらか�
 </ul>
 </div>
 </section>
-<section class="slide" id="_なぜshell_provisionder">
-<h2>なぜShell Provisionder？</h2>
+<section class="slide" id="_なぜshell_provisioner">
+<h2>なぜShell Provisioner？</h2>
 <div class="ulist">
 <ul>
 <li>WindowsからAnsibleは実行できないが、Vagrant上のLinuxにAnsibleをインストールすればOK</li>
@@ -119,7 +119,7 @@ ansible-playbook lxc_host.yml</code></pre>
 <li><p>
 Ansibleでコンテナに接続するにはコンテナ名を指定 (IPアドレス不要)<div class="ulist">
 <ul>
-<li><code>lxc-attach --active</code> を使ったスクリプトでDynamic Inventoryを実現</li>
+<li><code>lxc-ls --active</code> を使ったスクリプトでDynamic Inventoryを実現</li>
 </ul>
 </div></p></li>
 </ul>
@@ -146,7 +146,7 @@ Ansibleでコンテナに接続するにはコンテナ名を指定 (IPアドレ
 <div class="ulist">
 <ul>
 <li>vagrant upすればlxcセットアップからコンテナ作成まで行うAnsibleプレーブックを書いた</li>
-<li>Vagrant Shell ProvisionderでAnsibleをインストールすればWindows上でもOK</li>
+<li>Vagrant Shell ProvisionerでAnsibleをインストールすればWindows上でもOK</li>
 <li>Ansible Connection Plugin for lxc containersを使えばコンテナにsshd不要</li>
 </ul>
 </div>

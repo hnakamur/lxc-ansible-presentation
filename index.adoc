@@ -23,7 +23,7 @@ Presenter Hiroaki Nakamura
 * 仕事の案件で客先よりLXCを使うという指定があったから
 
 
-== なぜShell Provisionder？
+== なぜShell Provisioner？
 
 * WindowsからAnsibleは実行できないが、Vagrant上のLinuxにAnsibleをインストールすればOK
 * Macで使う場合もMac側にAnsibleインストール不要という利点がある
@@ -58,7 +58,7 @@ image::container-structure.png[]
 ** lxc公式にバンドルされているliblxcバインディングはPython3
 ** Ansibleは現状Python3非対応のためpython2-lxcが必要
 * Ansibleでコンテナに接続するにはコンテナ名を指定 (IPアドレス不要)
-** `lxc-attach --active` を使ったスクリプトでDynamic Inventoryを実現
+** `lxc-ls --active` を使ったスクリプトでDynamic Inventoryを実現
 
 
 == コンテナのIPアドレス取得
@@ -76,7 +76,7 @@ lxc-attach -n {{ container_name }} -- ip a show eth0 | awk '$1=="inet" {sub(/\/[
 == まとめ
 
 * vagrant upすればlxcセットアップからコンテナ作成まで行うAnsibleプレーブックを書いた
-* Vagrant Shell ProvisionderでAnsibleをインストールすればWindows上でもOK
+* Vagrant Shell ProvisionerでAnsibleをインストールすればWindows上でもOK
 * Ansible Connection Plugin for lxc containersを使えばコンテナにsshd不要
 
 なお、その後客先指定がlxcからdockerに変わったので実運用はしていません、あしからず。
