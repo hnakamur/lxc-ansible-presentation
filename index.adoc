@@ -75,6 +75,7 @@ lxc-attach -n {{ container_name }} -- ip a show eth0 | awk '$1=="inet" {sub(/\/[
 
 == まとめ
 
+* vagrant upすればlxcセットアップからコンテナ作成まで行うAnsibleプレーブックを書いた
 * Vagrant Shell ProvisionderでAnsibleをインストールすればWindows上でもOK
 * Ansible Connection Plugin for lxc containersを使えばコンテナにsshd不要
 
